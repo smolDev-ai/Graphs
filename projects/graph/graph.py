@@ -127,9 +127,9 @@ class Graph:
 
                 if current_node == destination_vertex:
                     return current_path
-                else:
-                    for neighbor in self.get_neighbors(current_node):
-                        queue.enqueue([*current_path, neighbor])
+            
+                for neighbor in self.get_neighbors(current_node):
+                    queue.enqueue([*current_path, neighbor])
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -168,9 +168,9 @@ class Graph:
 
                 if current_node == destination_vertex:
                     return current_path
-                else:
-                    for neighbor in self.get_neighbors(current_node):
-                        stack.push([*current_path, neighbor])
+                
+                for neighbor in self.get_neighbors(current_node):
+                    stack.push([*current_path, neighbor])
 
     def dfs_recursive(self, starting_vertex, destination_vertex, visited=set()):
         """
@@ -186,12 +186,12 @@ class Graph:
 
             if starting_vertex == destination_vertex:
                 return [starting_vertex]
-            else:
-                for neighbor in self.get_neighbors(starting_vertex):
-                    path = self.dfs_recursive(neighbor, destination_vertex, visited)
+        
+            for neighbor in self.get_neighbors(starting_vertex):
+                path = self.dfs_recursive(neighbor, destination_vertex, visited)
 
-                    if path is not None and destination_vertex in path:
-                        return [starting_vertex, *path]
+                if path is not None and destination_vertex in path:
+                    return [starting_vertex, *path]
                     
 
 

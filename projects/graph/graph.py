@@ -71,16 +71,13 @@ class Graph:
                 for edge in edges:
                     stack.push(edge)
 
-    def dft_recursive(self, starting_vertex, visited=set()):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-
-        if visited is None:
-            visited = set()
 
         if starting_vertex not in visited:
             print(starting_vertex)

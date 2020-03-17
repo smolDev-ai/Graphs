@@ -1,15 +1,17 @@
-from util import Stack, Queue
+from util import Stack
 
 
 def earliest_ancestor(ancestors, starting_node):
+    # important keywords for next time: furthest ancestor: means we need to
+    # keep track of length & potentially attempt DFT/DFS.
     # start by building a graph
     # spec says furthest away so depth-first?
     # search because we don't want to hit all nodes
 
     # can you create a function inside another function?
 
-    # need to change up get neighbors to work with the fact we don't actually have a graph class
-    #
+    # need to change up get neighbors to work with the fact we don't actually
+    # have a graph class
     def get_neighbors(node_id):
         # need to take the node_id
         # see if it has any neighbors
@@ -21,14 +23,8 @@ def earliest_ancestor(ancestors, starting_node):
         for parent, child in ancestors:
             if child == node_id:
                 neighbors.append(parent)
-        
-                # print(neighbors)
-    
+
         return neighbors
-
-
-
-        # ex: return node_id
 
     # create DFS
     stack = Stack()
@@ -43,8 +39,6 @@ def earliest_ancestor(ancestors, starting_node):
         current_path = stack.pop()
         current_node = current_path[-1]
 
-
-
         # find length of current path
         # compare path lengths between loops
         # If it's the longer of the two store it
@@ -55,7 +49,8 @@ def earliest_ancestor(ancestors, starting_node):
             current_parent = current_node
             # print(current_parent)
         if path_length == len(current_path) and current_parent:
-            # if they're the same length update parent with the smallest value parent
+            # if they're the same length update parent with the smallest value
+            # parent
             if current_parent > current_node:
                 # print(current_parent)
                 current_parent = current_node
@@ -65,9 +60,8 @@ def earliest_ancestor(ancestors, starting_node):
 
             for neighbor in get_neighbors(current_node):
                 stack.push([*current_path, neighbor])
-            
+
     if current_parent:
         return current_parent
 
     return -1
-

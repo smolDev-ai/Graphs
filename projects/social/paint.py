@@ -28,11 +28,32 @@ def strokes_required(canvas):
         visited.append([False] * len(canvas))
     stroke_count = 0
 
-    def get_neighbors(node_id):
+    def get_neighbors(row, col, canvas):
+        neighbors = []
+
+        # need to figure out a good way to check
+        # for the different letters
         pass
 
-    def depth(starting_vertex, end_vertex, visited):
-        pass
+    def depth(starting_vertex, end_vertex, canvas, visited):
+        stack = Stack()
+        stack.push((starting_vertex, end_vertex))
+
+        while stack.size > 0:
+            coords = stack.pop()
+            row = coords[0]
+            col = coords[1]
+
+            if not visited[row][col]:
+                # flip the visited matrix here to true
+                visited[row][col] = True
+
+                for node in get_neighbors(row, col, canvas):
+                    stack.push(node)
+        
+        return visited
+
+
 
     # From here we need to loop over the matrix and get the columns and
     # the rows similar to the island problem.
@@ -43,8 +64,8 @@ def strokes_required(canvas):
     # I think Brady did something like:
     # row - 1 for north
     # row + 1 for south
-    # col - 1 for east
-    # col + 1 for west
+    # col + 1 for east
+    # col - 1 for west
 
     # expected value is a number
     pass

@@ -1,3 +1,6 @@
+import random
+from util import Queue
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,8 +48,28 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        # Write a for loop that calls create user the right amount of times
+        for i in range(num_users):
+            self.add_user(f"User {i+1}")
 
         # Create friendships
+        # To create N random friendships,
+        # you could create a list with all possible friendship combinations,
+        # shuffle the list, then grab the first N elements from the list.
+        possible_friendships = []
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+
+        random.shuffle(possible_friendships)
+
+        # Create n friendships where n = avg_friendships * num_users // 2
+        # avg_friendships = total_friendships / num_users
+        # total_friendships = avg_friendships * num_users
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -57,14 +80,39 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
+
+        def get_neighbors(node_id):
+            neighbors = []
+
+            for friend in self.friendships[node_id]:
+                neighbors.append(friend)
+
+            return neighbors
+
+
+
+        queue = Queue()
+        queue.enqueue([user_id])
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+
+        # solution should be BFS
+        while queue.size() > 0:
+            current_path = queue.dequeue()
+
+            current_node = current_path[-1]
+
+            if current_node not in visited:
+                visited[current_node] = current_path
+
+                for neighbor in get_neighbors(current_node):
+                    queue.enqueue([*current_path, neighbor])
+
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.friendships)
+    print(f"friendships: {sg.friendships}")
     connections = sg.get_all_social_paths(1)
     print(connections)

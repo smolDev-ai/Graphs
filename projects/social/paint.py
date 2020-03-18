@@ -21,10 +21,21 @@ def strokes_required(canvas):
     # of the canvas
 
     # we also need a stroke counter
-   
+
+    visited = []
+
+    for i in range(len(canvas)):
+        visited.append([False] * len(canvas))
+    stroke_count = 0
+
+    def get_neighbors(node_id):
+        pass
+
+    def depth(starting_vertex, end_vertex, visited):
+        pass
+
     # From here we need to loop over the matrix and get the columns and
     # the rows similar to the island problem.
-
     
     # If, while we're moving through nodes, we come across one that isn't
     # already in visited, we need to add it.

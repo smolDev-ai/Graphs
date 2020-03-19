@@ -15,49 +15,6 @@ from util import Stack
 
 
 def strokes_required(canvas):
-    def get_neighbors(row, col, canvas):
-        neighbors = []
-
-        # need to figure out a good way to check
-        # for the different letters
-
-        # We need to get the nodes adjacent to it in the cardinal directions.
-        # I think Brady did something like:
-        # row - 1 for north
-        # row + 1 for south
-        # col + 1 for east
-        # col - 1 for west
-
-        if row > 0 and canvas[row-1][col] == 'a' or row > 0 and canvas[row-1][col] == 'b' or row > 0 and canvas[row-1][col] == 'c':
-            neighbors.append((row-1, col))
-        if row < len(canvas) - 1 and canvas[row+1][col] == 'a' or row < len(canvas) - 1 and canvas[row+1][col] == 'b' or row < len(canvas) - 1 and canvas[row+1][col] == 'c':
-            neighbors.append((row+1, col))
-        if col < len(canvas[0]) - 1 and canvas[row][col+1] == 'a' or col < len(canvas[0]) - 1 and canvas[row][col+1] == 'b' or col < len(canvas[0]) - 1 and canvas[row][col+1] == 'c':
-            neighbors.append((row, col+1))
-        if col > 0 and canvas[row][col-1] == 'a' or col > 0 and canvas[row][col-1] == 'b' or col > 0 and canvas[row][col-1] == 'c':
-            neighbors.append((row, col-1))
-        return neighbors
-
-    def depth(starting_vertex, end_vertex, canvas, visited):
-        stack = Stack()
-        stack.push((starting_vertex, end_vertex))
-
-        while stack.size() > 0:
-            coords = stack.pop()
-            row = coords[0]
-            col = coords[1]
-
-            if not visited[row][col]:
-                # flip the visited matrix here to true
-                visited[row][col] = True
-
-                for node in get_neighbors(row, col, canvas):
-                    stack.push(node)
-        
-        return visited
-
-    
-    
     # Need to create our visited matrix.
     # should be a matrix of False for the length
     # of the canvas
@@ -75,8 +32,11 @@ def strokes_required(canvas):
     # already in visited, we need to add it.
     for col in range(len(canvas[0])):
         for row in range(len(canvas)):
-            if not visited[row][col]:
-                if canvas[row][col] == 'a' or canvas[row][col] == 'b' or canvas[row][col] == 'c':
+            # print(row, col) # prints correctly
+            # print(f"for loop before if")
+            if canvas[row][col] == 'a' or canvas[row][col] == 'b' or canvas[row][col] == 'c':
+                if not visited[row][col]:
+                    print(f"for loop in if: {visited[row][col]}")
                     visited = depth(row, col, canvas, visited)
 
                     stroke_count += 1
@@ -84,13 +44,58 @@ def strokes_required(canvas):
     return stroke_count
 
 
-    
-    
+
+def depth(starting_vertex, end_vertex, canvas, visited):
+    stack = Stack()
+    stack.push((starting_vertex, end_vertex))
+
+    while stack.size() > 0:
+        coords = stack.pop()
+        row = coords[0]
+        col = coords[1]
+        # print(f"in depth:\n \tcoords: {coords}\n \tvisited: {visited}")
+
+        if not visited[row][col]:
+            # flip the visited matrix here to true
+            visited[row][col] = True
+            for node in get_neighbors(row, col, canvas, canvas[row][col]):
+                stack.push(node)
+
+    return visited
+
+
+def get_neighbors(row, col, canvas, string):
+    neighbors = []
+
+    # need to figure out a good way to check
+    # for the different letters
+
+    # We need to get the nodes adjacent to it in the cardinal directions.
+    # I think Brady did something like:
+    # row - 1 for north
+    # row + 1 for south
+    # col + 1 for east
+    # col - 1 for west
+
+    # print(f"canvas in get_neighbors: {canvas[row][col]}\n nodes: {row},{col}")
+
+    if row > 0 and canvas[row-1][col] == string:
+        neighbors.append((row-1, col))
+    if row < len(canvas) - 1 and canvas[row+1][col] == string:
+        neighbors.append((row+1, col))
+    if col < len(canvas[0]) - 1 and canvas[row][col+1] == string:
+        neighbors.append((row, col+1))
+    if col > 0 and canvas[row][col-1] == string:
+        neighbors.append((row, col-1))
+    print(row, col)
+    print(neighbors, canvas[row][col])
+    return neighbors
+
 
 
 
 print(strokes_required([
 ['a', 'a', 'a', 'b', 'a'],
-['a', 'b', 'a', 'b', 'a'],
+['b', 'b', 'b', 'a', 'b'],
 ['a', 'a', 'a', 'c', 'a'],
 ]))

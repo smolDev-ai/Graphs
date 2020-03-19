@@ -15,6 +15,50 @@ from util import Stack
 
 
 def strokes_required(canvas):
+    def get_neighbors(row, col, canvas, string):
+        neighbors = []
+
+        # need to figure out a good way to check
+        # for the different letters
+
+        # We need to get the nodes adjacent to it in the cardinal directions.
+        # I think Brady did something like:
+        # row - 1 for north
+        # row + 1 for south
+        # col + 1 for east
+        # col - 1 for west
+
+        # print(f"canvas in get_neighbors: {canvas[row][col]}\n nodes: {row},{col}")
+
+        if row > 0 and canvas[row-1][col] == string:
+            neighbors.append((row-1, col))
+        if row < len(canvas) - 1 and canvas[row+1][col] == string:
+            neighbors.append((row+1, col))
+        if col < len(canvas[0]) - 1 and canvas[row][col+1] == string:
+            neighbors.append((row, col+1))
+        if col > 0 and canvas[row][col-1] == string:
+            neighbors.append((row, col-1))
+        # print(row, col)
+        # print(neighbors, canvas[row][col])
+        return neighbors
+    
+    def depth(starting_vertex, end_vertex, canvas, visited):
+        stack = Stack()
+        stack.push((starting_vertex, end_vertex))
+
+        while stack.size() > 0:
+            coords = stack.pop()
+            row = coords[0]
+            col = coords[1]
+            # print(f"in depth:\n \tcoords: {coords}\n \tvisited: {visited}")
+
+            if not visited[row][col]:
+                # flip the visited matrix here to true
+                visited[row][col] = True
+                for node in get_neighbors(row, col, canvas, canvas[row][col]):
+                    stack.push(node)
+
+        return visited
     # Need to create our visited matrix.
     # should be a matrix of False for the length
     # of the canvas
@@ -45,51 +89,8 @@ def strokes_required(canvas):
 
 
 
-def depth(starting_vertex, end_vertex, canvas, visited):
-    stack = Stack()
-    stack.push((starting_vertex, end_vertex))
-
-    while stack.size() > 0:
-        coords = stack.pop()
-        row = coords[0]
-        col = coords[1]
-        # print(f"in depth:\n \tcoords: {coords}\n \tvisited: {visited}")
-
-        if not visited[row][col]:
-            # flip the visited matrix here to true
-            visited[row][col] = True
-            for node in get_neighbors(row, col, canvas, canvas[row][col]):
-                stack.push(node)
-
-    return visited
 
 
-def get_neighbors(row, col, canvas, string):
-    neighbors = []
-
-    # need to figure out a good way to check
-    # for the different letters
-
-    # We need to get the nodes adjacent to it in the cardinal directions.
-    # I think Brady did something like:
-    # row - 1 for north
-    # row + 1 for south
-    # col + 1 for east
-    # col - 1 for west
-
-    # print(f"canvas in get_neighbors: {canvas[row][col]}\n nodes: {row},{col}")
-
-    if row > 0 and canvas[row-1][col] == string:
-        neighbors.append((row-1, col))
-    if row < len(canvas) - 1 and canvas[row+1][col] == string:
-        neighbors.append((row+1, col))
-    if col < len(canvas[0]) - 1 and canvas[row][col+1] == string:
-        neighbors.append((row, col+1))
-    if col > 0 and canvas[row][col-1] == string:
-        neighbors.append((row, col-1))
-    print(row, col)
-    print(neighbors, canvas[row][col])
-    return neighbors
 
 
 
